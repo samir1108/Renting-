@@ -1,31 +1,53 @@
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import HotelCard from '@/components/HotelCard';
+import { useRouter } from 'expo-router';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+const hotelData = [
+    {
+        image: 'https://example.com/hotel-image1.jpg',
+        title: 'Elegant Hotel in Downtown',
+        location: '123 Main St, Downtown',
+        description: 'Experience luxury and comfort at the Elegant Hotel, with modern amenities and a central location.',
+        pricePerMonth: '3600'
+    },
+    {
+        image: 'https://example.com/hotel-image2.jpg',
+        title: 'Cozy Inn in the Suburbs',
+        location: '456 Elm St, Suburbs',
+        description: 'Enjoy a cozy stay with excellent amenities in a quiet suburban setting.',
+        pricePerMonth: '2700'
+    },
+    // Add more hotel data as needed
+];
 
-export default function TabOneScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
-  );
-}
+const App: React.FC = () => {
+    const router = useRouter();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+    const handleCardPress = (hotel) => {
+        router.push({
+            pathname: 'HotelDetails',
+            params: { hotel },
+        });
+    };
+
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView>
+                {hotelData.map((hotel, index) => (
+                    <TouchableOpacity key={index} onPress={() => handleCardPress(hotel)}>
+                        <HotelCard
+                            image={hotel.image}
+                            title={hotel.title}
+                            location={hotel.location}
+                            description={hotel.description}
+                            pricePerMonth={hotel.pricePerMonth}
+                        />
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
+        </SafeAreaView>
+    );
+};
+
+export default App;
