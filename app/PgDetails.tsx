@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, FlatList, Button, Dimensions, TouchableOpacity, Linking } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome for WhatsApp icon
+import { View, Text, Image, StyleSheet, ScrollView, FlatList, TouchableOpacity, Dimensions, Linking } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import { FontAwesome } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -20,8 +21,12 @@ const HotelDetails: React.FC = () => {
         contact: {
             phone: '+1234567890',
             email: 'info@eleganthotel.com',
-            whatsapp: '+1234567890' // WhatsApp number should be the same as phone for this example
-        }
+            whatsapp: '+1234567890',
+        },
+        coordinates: {
+            latitude: 37.78825,
+            longitude: -122.4324,
+        },
     };
 
     const handleCall = () => {
@@ -39,7 +44,7 @@ const HotelDetails: React.FC = () => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <FlatList
-                data={hotel.images} // Assumes 'images' is an array of image URLs
+                data={hotel.images}
                 renderItem={({ item }) => (
                     <Image source={{ uri: item }} style={styles.image} />
                 )}
@@ -53,7 +58,8 @@ const HotelDetails: React.FC = () => {
                 <Text style={styles.location}>{hotel.location}</Text>
                 <Text style={styles.description}>{hotel.description}</Text>
                 <View style={styles.priceContainer}>
-                    <Text style={styles.price}>₹{hotel.pricePerMonth}/month</Text>
+                    <Text style={styles.price}>₹{hotel.pricePerMonth}</Text>
+                    <Text style={styles.perMonth}>/month</Text>
                 </View>
                 <Text style={styles.amenitiesTitle}>Amenities</Text>
                 <View style={styles.amenitiesContainer}>
@@ -72,11 +78,26 @@ const HotelDetails: React.FC = () => {
                     <TouchableOpacity onPress={handleWhatsApp} style={styles.contactItem}>
                         <View style={styles.whatsappContainer}>
                             <FontAwesome name="whatsapp" size={20} color="#25D366" />
-                            <Text style={styles.contactText}> {hotel.contact.whatsapp}</Text>
+                            <Text style={styles.contactText}> WhatsApp</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
-                <Button title="Book Now" onPress={() => {/* Handle booking */}} />
+                <MapView
+                    style={styles.map}
+                    initialRegion={{
+                        latitude: hotel.coordinates.latitude,
+                        longitude: hotel.coordinates.longitude,
+                        latitudeDelta: 0.005,
+                        longitudeDelta: 0.005,
+                    }}
+                >
+                    <Marker
+                        coordinate={hotel.coordinates}
+                        title={hotel.title}
+                        description={hotel.location}
+                    />
+                </MapView>
+               
             </View>
         </ScrollView>
     );
@@ -85,42 +106,58 @@ const HotelDetails: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#f9f9f9',
     },
     image: {
         width,
-        height: 250,
+        height: 280,
         resizeMode: 'cover',
     },
     detailsContainer: {
-        padding: 16,
+        padding: 20,
+        backgroundColor: '#fff',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        marginTop: -20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
     },
     title: {
-        fontSize: 24,
+        fontSize: 26,
         fontWeight: 'bold',
+        color: '#333',
         marginBottom: 8,
     },
     location: {
         fontSize: 18,
-        color: '#888',
+        color: '#777',
         marginBottom: 16,
     },
     description: {
         fontSize: 16,
         color: '#555',
         marginBottom: 16,
+        lineHeight: 22,
     },
     priceContainer: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
         marginBottom: 16,
     },
     price: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
         color: '#e74c3c',
-        marginBottom: 8,
+    },
+    perMonth: {
+        fontSize: 16,
+        color: '#777',
+        marginLeft: 4,
     },
     amenitiesTitle: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 8,
     },
@@ -130,9 +167,10 @@ const styles = StyleSheet.create({
     amenity: {
         fontSize: 16,
         color: '#555',
+        marginVertical: 2,
     },
     contactTitle: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 8,
     },
@@ -140,7 +178,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     contactItem: {
-        paddingVertical: 8,
+        paddingVertical: 10,
     },
     contactText: {
         fontSize: 16,
@@ -149,6 +187,24 @@ const styles = StyleSheet.create({
     whatsappContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    map: {
+        width: '100%',
+        height: 200,
+        marginTop: 20,
+        borderRadius: 10,
+    },
+    bookButton: {
+        backgroundColor: '#007bff',
+        paddingVertical: 14,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginTop: 16,
+    },
+    bookButtonText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
 });
 

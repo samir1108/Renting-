@@ -26,7 +26,7 @@ const App: React.FC = () => {
 
     const handleCardPress = (hotel) => {
         router.push({
-            pathname: 'HotelDetails',
+            pathname: 'PgDetails',
             params: { hotel },
         });
     };
@@ -40,7 +40,6 @@ const App: React.FC = () => {
                             image={hotel.image}
                             title={hotel.title}
                             location={hotel.location}
-                            description={hotel.description}
                             pricePerMonth={hotel.pricePerMonth}
                         />
                     </TouchableOpacity>

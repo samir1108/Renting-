@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function LoginComponent() {
@@ -11,7 +11,7 @@ export default function LoginComponent() {
     const handleLogin = () => {
         console.log('Email/Number:', emailOrNumber);
         console.log('Password:', password);
-        router.push('/Home');
+        router.push('/MySpaces');
     };
 
     const handleRegister = () => {
@@ -23,8 +23,9 @@ export default function LoginComponent() {
             <Text style={styles.title}>Login</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Email or Phone Number"
-                keyboardType={isNaN(emailOrNumber) ? 'email-address' : 'phone-pad'}
+                placeholder="Phone Number"
+                placeholderTextColor="#888"
+                keyboardType= 'phone-pad'
                 autoCapitalize="none"
                 value={emailOrNumber}
                 onChangeText={setEmailOrNumber}
@@ -32,6 +33,7 @@ export default function LoginComponent() {
             <TextInput
                 style={styles.input}
                 placeholder="Password"
+                placeholderTextColor="#888"
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
@@ -50,41 +52,58 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        padding: 16,
-        backgroundColor: '#fff',
+        padding: 20,
+        backgroundColor: '#f2f2f7',
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 24,
+        fontSize: 28,
+        fontWeight: '600',
+        marginBottom: 32,
         textAlign: 'center',
+        color: '#333',
+        fontFamily: Platform.OS === 'ios' ? 'AvenirNext-DemiBold' : 'sans-serif-medium',
     },
     input: {
-        height: 40,
-        borderColor: '#ccc',
+        height: 50,
+        borderColor: '#ddd',
         borderWidth: 1,
-        borderRadius: 4,
-        marginBottom: 12,
-        paddingHorizontal: 8,
+        borderRadius: 10,
+        marginBottom: 20,
+        paddingHorizontal: 16,
+        backgroundColor: '#fff',
+        fontSize: 16,
+        fontFamily: Platform.OS === 'ios' ? 'AvenirNext-Regular' : 'sans-serif',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
     },
     button: {
-        backgroundColor: '#007bff',
-        paddingVertical: 12,
-        borderRadius: 4,
+        backgroundColor: '#007aff',
+        paddingVertical: 14,
+        borderRadius: 10,
         alignItems: 'center',
-        marginBottom: 12,
+        marginBottom: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 3,
     },
     buttonText: {
         color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 18,
+        fontWeight: '600',
+        fontFamily: Platform.OS === 'ios' ? 'AvenirNext-DemiBold' : 'sans-serif-medium',
     },
     registerButton: {
         alignItems: 'center',
-        marginTop: 12,
+        marginTop: 16,
     },
     registerButtonText: {
-        color: '#007bff',
+        color: '#007aff',
         fontSize: 16,
+        fontFamily: Platform.OS === 'ios' ? 'AvenirNext-Regular' : 'sans-serif',
     },
 });
